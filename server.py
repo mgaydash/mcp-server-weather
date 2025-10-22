@@ -1,5 +1,6 @@
 from typing import Any
 import httpx
+import json
 from mcp.server.fastmcp import FastMCP
 
 # Initialize FastMCP server
@@ -26,7 +27,8 @@ async def get_current_weather(latitude: float, longitude: float) -> str:
     if not data:
         return "Unable to fetch current weather data for this location."
 
-    return data
+    # Guard against non-string output to avoid errors
+    return json.dumps(data)
 
 
 async def make_openmeteo_request(url: str) -> dict[str, Any] | None:
