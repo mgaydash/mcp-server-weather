@@ -11,6 +11,14 @@ OPENMETEO_API_BASE = "https://api.open-meteo.com/v1"
 USER_AGENT = "weather-app/1.0"
 
 
+# TODO: get_forecast()
+# Retrieves the forecast for the specified location, with an optional argument for the range of the forecast
+
+
+# TODO: get_location()
+# Uses the Open-Meteo Geocoding API for more accurate location searches (without this you are relying on the LLM to generate the latitude and longitude, which can result in errors)
+
+
 @mcp.tool()
 async def get_current_weather(latitude: float, longitude: float) -> str:
     """Get current weather for a location.
