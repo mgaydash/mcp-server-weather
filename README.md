@@ -13,4 +13,4 @@ This project follows the [Building MCP Servers for Claude Desktop tutorial](http
 ## Testing
 
 - Run the application in dev mode with `mcp dev server.py`
-- Use the MCP Inspector at `http://localhost:5173` to test tools and view responses interactively.
+- Use the MCP Inspector at `http://localhost:6274` to test tools and view responses interactively.
