@@ -1,6 +1,7 @@
 from typing import Any
 import httpx
 import json
+from urllib.parse import quote
 from mcp.server.fastmcp import FastMCP
 
 # Initialize FastMCP server
@@ -11,8 +12,23 @@ mcp = FastMCP("weather")
 # Retrieves the forecast for the specified location, with an optional argument for the range of the forecast
 
 
-# TODO: get_location()
-# Uses the Open-Meteo Geocoding API for more accurate location searches (without this you are relying on the LLM to generate the latitude and longitude, which can result in errors)
+@mcp.tool()
+async def get_location(location: str) -> str:
+    """Search for a location and get its coordinates using the Open-Meteo Geocoding API.
+
+    Args:
+        location: Name of the location to search for (e.g., "New York", "London", "Tokyo")
+
+    Returns:
+        JSON string with location details including name, country, latitude, longitude, and other info
+    """
+    # Handle special characters and spaces in the location
+    location = quote(location)
+    url = f"https://geocoding-api.open-meteo.com/v1/search?name={location}&count=5&language=en&format=json"
+    data = await make_openmeteo_request(url)
+    if not data:
+        return "Unable to fetch location data. Please try a different location name."
+    return data
 
 
 @mcp.tool()
