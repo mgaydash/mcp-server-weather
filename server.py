@@ -34,9 +34,8 @@ async def get_current_weather(latitude: float, longitude: float) -> str:
 
     if not data:
         return "Unable to fetch current weather data for this location."
-
-    # Guard against non-string output to avoid errors
-    return json.dumps(data)
+    
+    return data
 
 
 async def make_openmeteo_request(url: str) -> dict[str, Any] | None:
@@ -49,7 +48,9 @@ async def make_openmeteo_request(url: str) -> dict[str, Any] | None:
         try:
             response = await client.get(url, headers=headers, timeout=30.0)
             response.raise_for_status()
-            return response.json()
+            # Guard against errors in MCP Inspcetor (and maybe elsewhere?) like
+            # "validation error for get_current_weatherOutput ... Input should be a valid string"
+            return json.dumps(response.json())
         except Exception:
             return None
 
