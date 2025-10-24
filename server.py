@@ -8,8 +8,28 @@ from mcp.server.fastmcp import FastMCP
 mcp = FastMCP("weather")
 
 
-# TODO: get_forecast()
-# Retrieves the forecast for the specified location, with an optional argument for the range of the forecast
+@mcp.tool()
+async def get_forecast(latitude: float, longitude: float, days: int = 7) -> str:
+    """Get weather forecast for a location.
+
+    Args:
+        latitude: Latitude of the location
+        longitude: Longitude of the location
+        days: Number of days to forecast (1-16, default is 7)
+    
+    Returns:
+        JSON string with daily weather forecast
+    """
+    # Validate days parameter
+    if days < 1:
+        days = 1
+    elif days > 16:
+        days = 16
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,weather_code,sunrise,sunset,uv_index_max&forecast_days={days}&timezone=auto"
+    data = await make_openmeteo_request(url)
+    if not data:
+        return "Unable to fetch forecast data for this location."
+    return data
 
 
 @mcp.tool()
