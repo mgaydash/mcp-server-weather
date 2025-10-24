@@ -35,6 +35,10 @@ async def get_forecast(latitude: float, longitude: float, days: int = 7) -> str:
 @mcp.tool()
 async def get_location(location: str) -> str:
     """Search for a location and get its coordinates using the Open-Meteo Geocoding API.
+    Open Meteo uses a fuzzy-matching algorithm such that queries like "New York, NY" or
+    "Gaithersburg, MD" do not return results. The search must be done on, for example,
+    "New York" or "Gaithersburg" and the exact match needs to be narrowed down from the
+    results.
 
     Args:
         location: Name of the location to search for (e.g., "New York", "London", "Tokyo")
