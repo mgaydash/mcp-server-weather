@@ -51,8 +51,8 @@ async def make_openmeteo_request(url: str) -> dict[str, Any] | None:
             # Guard against errors in MCP Inspcetor (and maybe elsewhere?) like
             # "validation error for get_current_weatherOutput ... Input should be a valid string"
             return json.dumps(response.json())
-        except Exception:
-            return None
+        except Exception as e:
+            return f'Error: {str(e)}'
 
 if __name__ == "__main__":
     # Initialize and run the server
